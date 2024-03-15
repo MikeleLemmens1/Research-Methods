@@ -2,7 +2,7 @@
 
 | Naam         | Voornaam  | Klasgroep | Github-gebruikersnaam                   |
 | :----------- | :-------- | :-------- | :-------------------------------------- |
-| Lemmens      | Mikele    | G2.A2/E3  | [UserName](https://github.com/MikeleLemmens1) |
+| Lemmens      | Mikele    | G2.A2/E3  | [MikeleLemmens1](https://github.com/MikeleLemmens1) |
 
 Deze Github-repository bevat al de nodige informatie i.v.m. de paper die je voor het vak Research Methods moet voorbereiden en schrijven. 
 
