@@ -5,9 +5,10 @@
 \documentclass{hogent-article}
 
 \usepackage{lipsum} % Voor vultekst
+\usepackage[backend=biber]{biblatex} 
 
 % Invoegen bibliografiebestand
-\addbibresource{references.bib}
+\addbibresource{LemmensMikele2024RM.bib}
 
 % Informatie over de opleiding, het vak en soort opdracht
 \studyprogramme{Professionele bachelor toegepaste informatica}
@@ -15,42 +16,30 @@
 \assignmenttype{Paper: Onderzoeksvoorstel}
 \academicyear{2023-2024}
 
-% TODO (fase 1): Werktitel
-\title{Werktitel van het voorstel}
+\title{Optimalisatie van het voorstellen van recepten op basis van gebruikersvoorkeuren}
 
-% TODO (fase 1): Studentnaam en emailadres invullen
-\author{Ernst Aarden}
-\email{ernst.aarden@student.hogent.be}
+\author{Mikele Lemmens}
+\email{Mikele.lemmens@student.hogent.be}
 
-% TODO (fase 1): Medestudent
-% Schrijf je het voorstel in samenwerking met een medestudent? Geef dan de naam
-% en emailadres hier. Als je het voorstel alleen schrijft, verwijder dan deze
-% regels of zet ze in commentaar.
-\author{Yasmine Alaoui}
-\email{yasmine.alaoui@student.hogent.be}
+\projectrepo{https://github.com/hogenttin/rm-2324-lemmensmikele}
 
-% TODO (fase 1): Geef hier de link naar jullie Github-repository
-\projectrepo{https://github.com/hogenttin/rm-2324-reponame}
+\specialisation{AI \& Data Engineering}
 
-% Binnen welke specialisatierichting uit 3TI situeert dit onderzoek zich?
-% Kies uit deze lijst:
-%
-% - Mobile \& Enterprise development
-% - AI \& Data Engineering
-% - Functional \& Business Analysis
-% - System \& Network Administrator
-% - Mainframe Expert
-% - Als het onderzoek niet past binnen een van deze domeinen specifieer je deze
-%   zelf
-%
-\specialisation{Mobile \& Enterprise development}
-% Geef hier enkele sleutelwoorden die je onderwerp beschrijven
-\keywords{Scheme, World Wide Web, $\lambda$-calculus}
+\keywords{recept voorstellen, voorkeur voeding, ingrediënt matching}
 
 \begin{document}
 
 \begin{abstract}
-  Hier neem je de abstract van je onderzoeksvoorstel over.
+    
+Een dagelijkse warme maaltijd is een belangrijk deel van een evenwichtig eetpatroon. In deze studie wordt een toepassing ontwikkeld die een relevant recept voorstelt aan een gebruiker die hulp wil bij het bedenken ervan en belang hecht aan een gezonde eetgewoonte. Er wordt geen gebruik gemaakt van taalmodellen om een bereidingswijze te genereren, maar wel van een dataset van bestaande hoofdgerechten. Het selecteren hiervan maakt ook deel uit van het onderzoek.
+
+De relevantie van een gerecht wordt bepaald op basis van een kwantitatieve waarderingsscore die de gebruiker aan voorgestelde gerechten geeft. Er worden twee technieken gecombineerd; In de eerste wordt een lijst van ingrediënten opgesteld die voorkomen in een dataset van recepten uit verschillende categorieën. Voor die verzameling wordt een score berekend die een maat is voor hoe goed de elementen bij elkaar passen. Hoe hoger de score, hoe groter de kans dat een gevonden recept bestaande uit deze ingrediënten een goede waardering krijgt. De gebruiker geeft een gewenst ingrediënt in waarna een viertal andere worden aangevuld door de toepassing.
+
+De tweede techniek berekent een waarde die aangeeft in hoeverre een reeks gerechten die op opeenvolgende dagen (zouden) worden klaargemaakt aan elkaar verwant zijn. Hoe lager deze score, hoe meer variëteit tussen de gerechten. Er wordt verwacht dat een grotere variatie gecorreleerd is met de waardering die elk recept in de reeks krijgt wanneer deze worden aangereikt. De recepten zijn geselecteerd op basis van de eerder gegenereerde ingrediëntenlijst en een gekozen categorie.
+
+Het verwachte resultaat is dat de waardering van voorgestelde maaltijden m.b.v. de beschreven werkwijze hoger is dan diegene die voortkomt uit een receptenlijst opgesteld door een eenvoudige zoekopdracht met sleutelwoorden. Het gebruik van deze toepassing dient zo te zorgen voor een aangenamere kookervaring, aangepast aan de gebruiker en zonder de noodzaak om zelf een hoofdgerecht te bedenken.
+
+
 \end{abstract}
 
 \tableofcontents
@@ -155,6 +144,6 @@ Als je onderwerp zich daartoe leent, kan je eventueel ook suggesties doen voor e
 % bibliografie.bib voorkomen. Gebruik JabRef om je bibliografie bij te
 % houden.
 
-\printbibliography[heading=bibintoc]
+%\printbibliography[heading=bibintoc, title={References}] 
 
 \end{document}

@@ -1,0 +1,20 @@
+%==============================================================================
+% Paper Research Methods: onderzoeksvoorstel
+%==============================================================================
+
+\documentclass{hogent-article}
+
+\begin{document}
+\begin{abstract}
+        Volgens M. Galle (2016) bestaat een evenwichtig eetpatroon uit onder meer een dagelijkse warme maaltijd. Niet iedereen heeft de nodige inspiratie om iedere dag een voldoende gevarieerde en aantrekkelijke maaltijd te bedenken. In deze paper wordt er op zoek gegaan naar een toepassing die dit proces kan faciliteren, enerzijds door het voorstellen van een geschikt recept op basis van relevante ingrediënten, anderzijds door het analyseren van de persoonlijke voorkeur van de gebruiker afgeleid uit diens eerder gebruikte recepten. Tal van toepassingen richten zich op het genereren van een recept op basis van een gegeven lijst van ingrediënten, maar dit is niet de scope van dit onderzoek. Er wordt gezocht naar technieken die de keuze van ingrediënten en vervolgens de voorgestelde recepten aansluit bij de voorkeuren van gebruikers.
+        
+        Het proces begint bij de keuze van een geschikte dataset. Voor deze use case worden 3 datasets vergeleken met elkaar, waaruit de Spoonacular API wordt geselecteerd om verder onderzoek op te verrichten. Deze dataset richt zich het meest op de relaties tussen ingrediënten, en verdeelt recepten onder in verschillende soorten categorieën. Dit helpt om de typicaliteit van een lijst ingrediënten te berekenen op verschillende subgroepen van recepten. Het nadeel van deze API is het beperkt aantal gerechten (ongeveer 5000), waardoor de kans op bias gebonden aan een bepaalde streek groter is. 
+        
+        Als basis voor een geschikt voorstel wordt in dit onderzoek een ingrediëntenlijst gemaakt. S. Yokoi et al. (2015) beschrijven de techniek `typicality analysis', dewelke een lijst quoteert afhankelijk van hoe vaak ingrediënten samen voorkomen. Voor een gekozen categorie wijst een hogere score op een grotere kans om recepten te vinden wiens ingrediëntenlijst overeenkomt met de ontworpen lijst. Het doel, is om beginnende van 0 of 1 gekozen ingrediënt, een lijst van 5 ingrediënten te genereren die zullen gebruikt worden in een recept. Het beperken van het aantal ingrediënten verhoogt de variatie aan recepten die matchen.
+        
+        Tot slot dient de gebruiker te kunnen kiezen uit enkele recepten. Een voorkeur kan verschillen van dag tot dag, en het afwisselen van gerechten draagt bij aan een gezond eetpatroon. M. Ueda ontwikkelde in 2011 een manier om voorkeur voor een recept te destilleren gebaseerd op een lijst van eerder klaargemaakte gerechten. Om de score te berekenen worden volgende parameters in rekening gebracht: een positieve en negatieve ingrediëntscore (hoe frequenter een ingrediënt gebruikt is en hoe specifieker, hoe hoger deze score. De frequentie waarmee een recept met een ingrediënt is afgewezen verlaagt deze score. ) en een similariteitsscore. Deze laatste is afhankelijk van hoe nauw het voorgestelde gerecht verbonden is met een eerder klaargemaakt recept en verlaagt naarmate dit verder in het verleden is klaargemaakt. 
+        
+        Door deze stappen in het proces te optimaliseren is het verwachte resultaat een hogere waardering van een voorgesteld gerecht. De gebruiker krijgt een gevarieerde lijst van ingrediënten die niet willekeurig is opgesteld maar afgestemd op de gerechten die zullen worden voorgesteld. Voorgestelde recepten worden vervolgens onderworpen aan een sortering die eerder klaargemaakte recepten in rekening brengt om variatie te brengen in wat wordt voorgesteld.  
+        
+ \end{abstract}
+\end{document}
