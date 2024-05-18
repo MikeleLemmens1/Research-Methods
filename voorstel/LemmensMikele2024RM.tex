@@ -60,15 +60,6 @@ Het verwachte resultaat is dat de waardering van voorgestelde maaltijden m.b.v. 
 
 % TODO: (fase 1 - onderzoeksvraag formuleren)
 
-Waarover zal het onderzoek gaan? Introduceer het thema en zorg dat volgende zaken zeker duidelijk aanwezig zijn:
-
-\begin{itemize}
-  \item kaderen thema
-  \item de doelgroep
-  \item de probleemstelling en onderzoeksvraag
-  \item de onderzoeksdoelstelling
-\end{itemize}
-
 Een dagelijkse warme maaltijd hoort bij een gezond eetpatroon volgens\cite{Galle2016}. Het is een meerwaarde om te kunnen worden geholpen door een toepassing die één of meerdere gerechten kan voorstellen, zodoende je niet steeds zelf een maaltijd hoeft te bedenken. Er zijn tal van kookboeken, websites en andere bronnen waarop je kan kiezen wat je wil klaarmaken. Ook worden er steeds meer toepassingen ontwikkeld die NLP gebruiken om recepten zelf te bedenken, bereidingswijzen te destilleren uit een foto, het samenstellen van een dieet naargelang voedingswaarden, enz. Het slagen van deze technieken is afhankelijk van hoe sterk een maaltijd wordt gewaardeerd, wat op zijn beurt afhangt van (historische) persoonlijke voorkeuren die onvoldoende in rekening worden gebracht.
 
 In dit onderzoek wordt een proefopstelling ontwikkeld die na een ingevoerd ingrediënt aanvult met andere passende ingrediënten. Deze lijst wordt gebruikt om recepten op te zoeken in een databank. Bij uitbreiding kunnen meerdere recepten worden gekozen als weekmenu, waarbij een techniek wordt gebruikt die ervoor zorgt dat er voldoende variatie tussen de maaltijden is. Het gebruik van deze technieken, samen met een zelf opgemaakte databank en het bijhouden van een waardering per gebruiker maken de voorgestelde gerechten relevant. We richten ons op Belgen die dagelijks een warme maaltijd klaarmaken en hiervoor gebruik maken van een digitaal hulpmiddel om recepten op te zoeken. 
@@ -109,21 +100,44 @@ Als je informatie over bronnen verzamelt in JabRef, zorg er dan voor dat alle no
 
 % TODO: (fase 5 - methodologie)
 
+Het onderzoek bestaat uit verschillende fasen:
+\begin{itemize}
+    \item het creëren van de databank
+    \item uitwerken van het proces om ingrediënten te matchen
+    \item implementatie van het zoeken van 1 recept
+    \item implementatie van het combineren van meerdere recepten
+\end{itemize}
+
+\subsection{Databank}%
+
+Er wordt gestart met het opzetten en vullen van de databank waarin gerechten later worden opgezocht. Het genereren van bereidingen m.b.v. LLM is een vakgebied op zich en valt buiten de scope van dit onderzoek. Er bestaan reeds een groot aantal datasets, maar omdat we de zoekresultaten willen afstemmen op de gebruiker verkiezen we om de recepten van Nederlandstalige websites te scrapen. Dit maakt dat de meeste recepten niet ver afwijken van onze eetcultuur, wat ze gepaster maakt en de kans vergroot dat alle ingrediënten makkelijk aangekocht kunnen worden. De gebruiker zou ter uitbreiding websites kunnen selecteren als bron.
+
+Recepten dienen opgeslagen te worden met volgende eigenschappen: titel, waardering, ingrediënten (met elk een naam, hoeveelheid en eenheid), een afbeelding, bereidingswijze, aantal personen, categorieën en bron. Omwille van de geneste attributen is JSON een handige notatie om de recepten op te slaan. Een primaire sleutel als identificatie per recept en per ingrediënt wordt toegevoegd om performant te kunnen opzoeken in de databank.
+
+
+We nemen 2 willekeurige Belgische websites als proef en zoeken naar de HTML-tags waarin de door ons gezochte inhoud zit. In beide gevallen zijn de recepten zodanig gestructureerd dat de gewenste inhoud snel terug te vinden is a.d.h.v. duidelijke klassen (zoals recipe-content\_body) voor de bereidingswijze op een van de sites. Met de python bibliotheek Beautiful Soup kan de DOM-tree van een website worden overlopen om rauwe data te destilleren. De URL's van de pagina's die gescrapet moeten worden zijn te vinden in de sitemap (indien toegankelijk).  Er dienen nog enkele bewerkingen te gebeuren op de verzamelde data: de categorieën moeten bijgehouden worden bij het recept en de ingrediënten moeten zodanig worden aangepast dat verschillende schrijfwijzen worden gemapt op 1 ingrediënt (tomaten en tomaatjes moeten geïdentificeerd worden als tomaat). Dezelfde techniek kan worden toegepast wanneer de gebruiker een ingrediënt invoert.
+De gerechten moeten worden onderverdeeld in categorieën. Dit is nodig om later voor een ingrediënt de best passende andere ingrediënten te vinden (deze score wordt berekend binnen een categorie, en een andere categorie geeft andere ingrediënten als best passend). De volgende categorieën zijn van toepassing: vlees, vis, gevogelte, wild, vegetarisch, salade, pasta, ovenschotel. Deze lijst kan worden uitgebreid en ieder recept kan in verschillende categorieën worden opgenomen. Hoe meer recepten er in zo'n categorie thuishoren, hoe accurater de typicaliteitsscore later kan worden berekend zonder in te boeten op variatie. Gerechten die niet kunnen worden onderverdeeld in een van deze categorieën (mogelijks ontbreekt er een onderverdeling op de bronwebsite) worden verzameld in een algemene categorie (“hoofdgerecht”). Deze recepten kunnen bij uitbreiding nog gecategoriseerd worden (door bv. te zoeken naar sleutelwoorden zoals “pasta, kip,…”) ter onderhoud van de toepassing.
+Een ingrediënt moet worden getransformeerd zodat de gebruikte ingrediënten uniek terug te vinden zijn in onze ingrediëntentabel. Een nuttige techniek die kan worden toegepast is beschreven door S. Chaudhuri et al. (2003) en heet “fuzzy matching”.  
+
+Deze techniek vergelijkt een nieuw ingrediënt met de reeds (in enkelvoud) opgeslagen ingrediënten. Er zijn 2 parameters die de performantie beïnvloeden: de grenswaarde en similariteitsfunctie. Deze laatste berekent een score die aangeeft hoe verwant 2 woorden zijn. Wanneer deze score boven een bepaalde grenswaarde valt spreken we van een match. Het nieuwe ingrediënt wordt in dat geval vervangen door de naam van het eerder opgeslagen ingrediënt. Voor twijfelgevallen over de juiste transformatie (“spruit” matcht even goed met “druif” als met “pruim” wanneer we Levenstein distance () nemen als functie) wordt er gebruik gemaakt van een logbestand om gericht te kunnen debuggen. Het kan interessant zijn om een bepaald interval in te stellen waarin alle twijfelgevallen moeten worden beoordeeld om zo de ideale grenswaarde te vinden.
+
+Op deze moment hebben we een aantal recepten, voorzien van een titel, foto, ingrediëntenlijst en bereidingswijze. Ze zijn voorzien van één of meerdere categorieën. De ingrediënten die terug te vinden zijn in de receptenlijst zijn getransformeerd naar een uniek ingrediënt uit de ingrediëntentabel waarnaar in het recept wordt verwezen met een vreemde sleutel. Voor de bereidingswijze kan er worden gewerkt met een stappenplan, maar in de scope van dit onderzoek wordt deze als volle tekst gebruikt zoals ze van de site wordt gehaald. Indien de website de bereiding toch onderverdeeld worden alle onderdelen samengevoegd tot 1 veld om compatibel te zijn met de databank.
+
+\subsection{Ingredient matching}%
+
+Voor de volgende stap worden alle recepten onderverdeeld per categorie. Iedere categorie heeft bepaalde ingrediënten die typerend zijn. We willen een score toewijzen aan een set van ingrediënten voor een bepaalde categorie die verhoogt naarmate de combinatie van ingrediënten erbinnen vaak voorkomt. De werkwijze die wordt gehanteerd is beschreven door S.Yokoi (cite).
+
+Ieder recept heeft een overeenstemmende vector die aanduid waaruit het bestaat. Deze heeft een lengte gelijk aan het aantal verschillende ingrediënten in de databank en de aan- of afwezigheid van een ingrediënt wordt aangeduid met resp. 1 of 0. Al deze vectoren worden samengevoegd tot een matrix met  corresponderende eigenruimte (de numpy-bibliotheek Linear Algebra bevat een methode om deze te berekenen in python). De typicaliteitsscore van een deelverzameling van de ruimte is de L2-norm van de genormaliseerde projectie op de eigenruimte. De waarde ligt tussen 0 en 1 en een hogere waarde wijst erop dat de ingrediënten sterk vertegenwoordigd zijn binnen de categorie. Tot slot implementeren we een manier om de gebruikersvoorkeuren te laten meespelen. Hiervoor meten we hoe vaak een ingrediënt voorkomt in eerder klaargemaakte bereidingen, waarbij diegene die nog niet gebruikt zijn niet in rekening worden gebracht. De typicaliteitsscore wordt verzwaard met het gemiddelde van deze verhoudingen, om de uiteindelijke score te verkrijgen.
+
+Het is deze score die moet worden geoptimaliseerd om een goede match te krijgen. Er moeten verschillende combinaties van 4 ingrediënten worden uitgeprobeerd (waarin datgene aangegeven door de gebruiker steeds is ingevuld) totdat een vastgelegde grenswaarde is overschreden. Dit garandeert ons dat niet 1 beste match steeds naar voor komt maar een groep waaruit werd gekozen. De input wordt gebruikt als seed, de overige 3 elementen van de rij worden willekeurig geïnitialiseerd, om vervolgens 1 voor 1 te worden vervangen door een willekeurig ander element uit de ongebruikte verzameling. 
+
+
+
+ \subsection{1 recept zoeken}%
+\subsection{Menu samenstellen}%
+
 De relevantie van een gerecht wordt gemeten a.d.h.v. hoe vaak een recept wordt gelezen maar niet gemarkeerd als `klaargemaakt`.
 
-\textit{Hier beschrijf je hoe je van plan bent het onderzoek te voeren. Verdeel het onderzoek op in verschillende fasen en probeer te formuleren welke concrete deliverable(s) het resultaat zijn van elke fase.
-
-Welke onderzoekstechniekenen ga je toepassen om elk van je onderzoeksvragen te beantwoorden? Gebruik je hiervoor literatuurstudie, interviews met belanghebbenden (bv.\ voor re\-quire\-ments-a\-na\-ly\-se), experimenten, simulaties, vergelijkende studie, risico-analyse, PoC, \ldots?
-
-Valt je onderwerp onder één van de typische soorten bachelorproeven die besproken zijn in de lessen Research Methods (bv.\ vergelijkende studie of risico-analyse)? Zorg er dan ook voor dat we duidelijk de verschillende stappen terug vinden die we verwachten in dit soort onderzoek!
-
-Vermijd onderzoekstechnieken die geen objectieve, meetbare resultaten kunnen opleveren. Enquêtes, bijvoorbeeld, zijn voor een bachelorproef informatica meestal \textbf{niet geschikt}. De antwoorden zijn eerder meningen dan feiten en in de praktijk blijkt het ook bijzonder moeilijk om voldoende respondenten te vinden. Studenten die een enquête willen voeren, hebben meestal ook geen goede definitie van de populatie, waardoor ook niet kan aangetoond worden dat eventuele resultaten representatief zijn.
-
-Uit dit onderdeel moet duidelijk naar voor komen dat je bachelorproef ook technisch voldoen\-de diepgang zal bevatten. Het zou niet kloppen als een bachelorproef informatica ook door bv.\ een student marketing zou kunnen uitgevoerd worden.
-
-Je beschrijft ook al welke tools (hardware, software, diensten, \ldots) je denkt hiervoor te gebruiken of te ontwikkelen.
-
-Probeer ook een tijdschatting te maken door een deadline op te geven voor elke fase. Neem voldoende tijd voor de belangrijkste fasen in je onderzoek, nl.\ het uitwerken van je eigen bijdrage (PoC bouwen, experimenten uitvoeren, enz.). Hou er rekening mee dat je typisch één dag per week kan werken aan je bachelorproef. Dat betekent dat uitspraken als ``voor deze fase wordt twee weken tijd voorzien'' erg dubbelzinnig zijn. Betekent dit dat je in realiteit twee dagen zal werken aan deze fase? Of tien werkdagen verspreid over een aantal weken? Zorg dat het duidelijk is wat je precies bedoelt!}
 
 \section{Verwachte resultaten}%
 \label{sec:verwachte-resultaten}
