@@ -36,6 +36,10 @@ C. Fuchs, C. Gimmler, S. G¨unther, L. Holthof, and R. Bergmann,
 “Cooking cake,” in ICCBR, vol. 9, 2009, pp. 259–268.
 Recipe similarity
 
+Jill Freye and Shlomo Berkovsky. Intelligent Food Planning: Personalized Recipe
+Recommendation. In IUI(2010) 321-324.
+Recommendation
+
 MOCKUPS?
 ARCHITECTURE?
 
@@ -53,3 +57,8 @@ Overzicht van enkele ML-projecten inzake recipe generation. Inspiratie voor CBR 
 Cooking recipes generator utilizing a deep learning-based
 language model
 Beschrijft webscrape/datacleaning en gebreken van datasets. Duplicates removal: aanwijzing voor similariteit tussen gerechten met TF-IDF (term frequency-inverse document frequency). Ingrediënt preprocessing (SpaCy NER)
+
+TODO: Statistieken kooksites verzamelen
+Cookpad[1] and Yahoo! Recipe[2]. Many people
+refer to these websites when planning their menu. Cookpad contains 900,000
+recipes and has 10,000,000 monthly users[3]. (Preference extraction)
